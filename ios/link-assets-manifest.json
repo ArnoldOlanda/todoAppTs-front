@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Khand-Bold.ttf",
+      "sha1": "71f2bfb1bfad8b8e9d5ad889424b31adbdae3174"
+    },
+    {
+      "path": "assets/fonts/Khand-Light.ttf",
+      "sha1": "f6558c89783934d7f147ce4dce9ed05cc774ad4f"
+    },
+    {
+      "path": "assets/fonts/Khand-Medium.ttf",
+      "sha1": "9c874f99cf1fc8e46b5216c08a0c50003bee9e7b"
+    },
+    {
+      "path": "assets/fonts/Khand-Regular.ttf",
+      "sha1": "5d53de29556b062e808f10afaaf02b483157da20"
+    },
+    {
+      "path": "assets/fonts/Khand-SemiBold.ttf",
+      "sha1": "17a59e7f4fd694d9a8ec5bc24d33d01fcba2f568"
+    }
+  ]
+}
