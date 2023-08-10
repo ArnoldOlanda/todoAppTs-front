@@ -4,10 +4,12 @@ import {
   TextInput as RNTextInput,
   StyleSheet,
   TouchableOpacity,
+  Text,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles} from '../theme/styles';
-import {Text} from 'react-native';
 
 interface Props {
   value: string;
@@ -15,6 +17,10 @@ interface Props {
   secureTextEntry?: boolean;
   error: boolean;
   errorMessage: string | null;
+  multiline?: boolean;
+  icon?: JSX.Element | null;
+  style?: StyleProp<ViewStyle>;
+  onPressIcon?: Function;
   onChange: (value: string) => void;
 }
 
@@ -22,26 +28,51 @@ export const TextInput = ({
   value,
   placeholder,
   secureTextEntry = false,
+  multiline = false,
+  icon,
+  onPressIcon,
   error,
   errorMessage,
   onChange,
+  style = {},
 }: Props) => {
   const [showPassword, setShowPassword] = useState<boolean>(secureTextEntry);
 
   return (
-    <View>
+    <View style={{alignItems: 'center', width: '100%', ...(style as object)}}>
       <View
         style={[
           styles.inputContainer,
-          !error
-            ? globalStyles.textInput
-            : {...globalStyles.textInput, borderColor: 'red'},
+          !multiline
+            ? !error
+              ? globalStyles.textInput
+              : {...globalStyles.textInput, borderColor: 'red'}
+            : !error
+            ? {
+                ...globalStyles.textInput,
+                height: 150,
+              }
+            : {
+                ...globalStyles.textInput,
+                height: 150,
+                borderColor: 'red',
+              },
         ]}>
         <RNTextInput
           placeholder={placeholder}
-          style={{flex: 1}}
+          style={[
+            {flex: 1},
+            multiline
+              ? {
+                  textAlignVertical: 'top',
+                  height: '100%',
+                }
+              : {},
+          ]}
           onChangeText={value => onChange(value)}
           value={value}
+          multiline={multiline}
+          numberOfLines={2}
           secureTextEntry={showPassword}
         />
         {secureTextEntry ? (
@@ -53,11 +84,24 @@ export const TextInput = ({
             )}
           </TouchableOpacity>
         ) : null}
+        {icon && onPressIcon ? (
+          <TouchableOpacity onPress={() => onPressIcon()}>
+            {icon}
+          </TouchableOpacity>
+        ) : null}
       </View>
       {error ? (
-        <Text style={{fontSize: 12, marginLeft: 10, color: 'red'}}>
-          {errorMessage}
-        </Text>
+        <View style={{width: '100%'}}>
+          <Text
+            style={{
+              fontSize: 12,
+              marginHorizontal: 15,
+              color: 'red',
+              textAlign: 'left',
+            }}>
+            {errorMessage}
+          </Text>
+        </View>
       ) : null}
     </View>
   );

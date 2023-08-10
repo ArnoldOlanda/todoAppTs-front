@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {AxiosResponse} from 'axios';
 import {AxiosCall} from '../models/axiosCall.model';
 
-export const useFetchAndLoad = async () => {
+export const useFetchAndLoad = () => {
   const [loading, setLoading] = useState(false);
   let controller: AbortController;
 

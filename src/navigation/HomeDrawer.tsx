@@ -8,8 +8,9 @@ import {HomeScreen} from '../screens';
 import {TouchableAndroid} from '../components/TouchableAndroid';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {SettingsScreen} from '../screens/SettingsScreen';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../redux/slices/auth.slice';
+import {RootState} from '../redux/store';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,11 +33,14 @@ export const HomeDrawer = () => {
 
 const DrawerContent = ({navigation}: DrawerContentComponentProps) => {
   const dispatch = useDispatch();
+  const {user} = useSelector((state: RootState) => state.auth);
   return (
     <DrawerContentScrollView style={styles.drawerContent}>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
           <Icon name="person" size={120} color="#000" />
+          <Text style={{fontSize: 25}}>{user?.user}</Text>
+          <Text>{user?.name}</Text>
         </View>
         <TouchableAndroid
           containerStyles={styles.menuItem}
@@ -86,5 +90,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    paddingHorizontal: 10,
   },
 });

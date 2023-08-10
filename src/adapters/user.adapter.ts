@@ -1,7 +1,7 @@
 import {User} from '../models/user.model';
-import {LoginResponse} from '../types';
+import {UserResponse} from '../types';
 
-export const adaptedUser = (user: LoginResponse): User => ({
+export const adaptedUser = (user: UserResponse): User => ({
   id: user.user.id,
   name: user.user.name,
   user: user.user.user,

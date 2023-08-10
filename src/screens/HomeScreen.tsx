@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 
 import {globalStyles} from '../theme/styles';
@@ -14,12 +15,23 @@ import {UserIcon} from '../components/icons/UserIcon';
 import {TodoIlustration} from '../components/TodoIlustration';
 import {Categories, TasksList} from '../components';
 import {DrawerScreenProps} from '@react-navigation/drawer';
+import {useSelector} from 'react-redux';
+import {RootState} from '../redux/store';
+import {useTodosStore} from '../hooks/useTodosStore';
+import {Fab} from '../components/Fab';
+import {Modal} from '../components/Modal';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 const windowWidth = Dimensions.get('screen').width;
 
 interface Props extends DrawerScreenProps<any> {}
 
 export const HomeScreen = ({navigation}: Props) => {
+  const {todos} = useSelector((state: RootState) => state.todo);
+  const {loading, refreshing, onRefresh} = useTodosStore();
+
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -40,11 +52,18 @@ export const HomeScreen = ({navigation}: Props) => {
           <TodoIlustration />
         </View>
       </View>
-      <ScrollView style={{width: '100%', paddingHorizontal: 15}}>
+      <ScrollView
+        style={{width: '100%', paddingHorizontal: 15}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <Categories />
 
-        <TasksList />
+        {loading ? <ActivityIndicator /> : <TasksList todos={todos} />}
+        <View style={{height: 100}} />
       </ScrollView>
+      <Fab onPress={() => setOpenModal(true)} />
+      <Modal open={openModal} close={() => setOpenModal(false)} />
     </View>
   );
 };

@@ -1,22 +1,39 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import {Todo} from '../models/todo.model';
+import {formatedTime} from '../utilities/formatedTime';
+import {useCompleteTodo} from '../hooks/useCompleteTodo';
 
 interface Props {
-  completed?: boolean;
+  todo: Todo;
 }
 
-export const TaskItem = ({completed}: Props) => {
+export const TaskItem = ({todo}: Props) => {
+  const {handleCheckTodo, handleDeleteTodo, checked, date, title} =
+    useCompleteTodo(todo);
+
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          textDecorationLine: completed ? 'line-through' : 'none',
-          flex: 1,
-          fontSize: 16,
-        }}>
-        Daily UI Challenge
-      </Text>
-      <Text style={{fontSize: 16, color: '#0071F2'}}>9:00 am</Text>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: checked ? '#eee' : '#fff',
+        elevation: checked ? 0 : 2,
+      }}>
+      <BouncyCheckbox
+        size={25}
+        text={title}
+        isChecked={checked}
+        // disabled={checked}
+        fillColor="#0071F2"
+        unfillColor="#FFFFFF"
+        innerIconStyle={{borderWidth: 2}}
+        textStyle={{fontFamily: 'JosefinSans-Regular'}}
+        onPress={handleCheckTodo}
+        onLongPress={() => handleDeleteTodo(todo.id)}
+        style={{flex: 1}}
+      />
+      <Text style={{fontSize: 16, color: '#0071F2'}}>{formatedTime(date)}</Text>
     </View>
   );
 };

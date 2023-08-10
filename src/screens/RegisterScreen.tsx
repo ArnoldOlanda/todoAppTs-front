@@ -1,61 +1,32 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
-  ToastAndroid,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {Validation} from '../types';
+import {StackScreenProps} from '@react-navigation/stack';
 import {globalStyles} from '../theme/styles';
-import {useForm} from '../hooks/useForm';
+import {useRegisterStore} from '../hooks/useRegisterStore';
 import {RegisterIlustration} from '../components/RegisterIlustration';
 import {TextInput} from '../components/TextInput';
 import {Button} from '../components/Button';
-import {StackScreenProps} from '@react-navigation/stack';
 
-interface InitialState {
-  name: string;
-  user: string;
-}
+// interface Props extends StackScreenProps<any> {}
 
-const initialState: InitialState = {
-  name: '',
-  user: '',
-};
-
-const validations: Record<keyof InitialState, Validation> = {
-  name: [(value: string) => value.length >= 1, 'Este campo es obligatorio'],
-  user: [(value: string) => value.length >= 1, 'Este campo es obligatorio'],
-};
-
-interface Props extends StackScreenProps<any> {}
-
-export const RegisterScreen = ({navigation}: Props) => {
+export const RegisterScreen = () => {
   const {
+    confirmPassword,
     formState,
+    formSubmited,
     formValidation,
-    setFormValidation,
-    isFormValid,
+    handlePressRegister,
+    loading,
     onInputTextChange,
-  } = useForm(initialState, validations);
-  const [formSubmited, setFormSubmited] = useState(false);
-  const [passwords, setPasswords] = useState({
-    password: '',
-    confirmPassword: '',
-  });
-  const {nameValid, userValid} = formValidation;
-
-  const handlePressRegister = async () => {
-    setFormSubmited(true);
-    if (!isFormValid) {
-      ToastAndroid.show('Revise la informacion ingresada', ToastAndroid.SHORT);
-    } else {
-      console.log(formState, passwords);
-      navigation.navigate('Home');
-    }
-  };
+    setConfirmPassword,
+  } = useRegisterStore();
+  const {nameValid, userValid, passwordValid} = formValidation;
 
   return (
     <KeyboardAvoidingView
@@ -89,28 +60,30 @@ export const RegisterScreen = ({navigation}: Props) => {
           errorMessage={userValid}
         />
         <TextInput
-          value={passwords.password}
+          value={formState.password}
           placeholder="password"
-          onChange={value => setPasswords({...passwords, password: value})}
-          error={passwords.password.length < 1 && formSubmited}
-          errorMessage={'Este campo es obligatorio'}
+          onChange={value => onInputTextChange('password', value)}
+          error={!!userValid && formSubmited}
+          errorMessage={passwordValid}
           secureTextEntry
         />
         <TextInput
-          value={passwords.confirmPassword}
+          value={confirmPassword}
           placeholder="confirmPassword"
-          onChange={value =>
-            setPasswords({...passwords, confirmPassword: value})
-          }
+          onChange={value => setConfirmPassword(value)}
           error={
-            passwords.confirmPassword !== passwords.password &&
-            passwords.confirmPassword.length >= 1
+            formState.password !== confirmPassword &&
+            confirmPassword.length >= 1
           }
-          errorMessage={'Las contraseñas no coinciden'}
+          errorMessage={'The passwords no match'}
           secureTextEntry
         />
         <View style={{height: 20}} />
-        <Button onPress={handlePressRegister} title="Register" />
+        <Button
+          onPress={handlePressRegister}
+          title="Register"
+          isLoading={loading}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
