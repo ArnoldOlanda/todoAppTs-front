@@ -21,20 +21,23 @@ import {useTodosStore} from '../hooks/useTodosStore';
 import {Fab} from '../components/Fab';
 import {Modal} from '../components/Modal';
 import {RefreshControl} from 'react-native-gesture-handler';
+import {Header} from '../components/common/Header';
 
 const windowWidth = Dimensions.get('screen').width;
 
 interface Props extends DrawerScreenProps<any> {}
 
 export const HomeScreen = ({navigation}: Props) => {
-  const {todos} = useSelector((state: RootState) => state.todo);
+  const {todos, filterApplied, filteredTodos} = useSelector(
+    (state: RootState) => state.todo,
+  );
   const {loading, refreshing, onRefresh} = useTodosStore();
 
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
+      {/* <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.headerItem}
           onPress={() => navigation.openDrawer()}>
@@ -43,7 +46,8 @@ export const HomeScreen = ({navigation}: Props) => {
         <TouchableOpacity style={styles.headerItem}>
           <UserIcon />
         </TouchableOpacity>
-      </View>
+      </View> */}
+      <Header />
       <View style={styles.messageViewContainer}>
         <Text style={{...globalStyles.text, color: 'white', width: '40%'}}>
           Manage your time well
@@ -59,7 +63,11 @@ export const HomeScreen = ({navigation}: Props) => {
         }>
         <Categories />
 
-        {loading ? <ActivityIndicator /> : <TasksList todos={todos} />}
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <TasksList todos={filterApplied ? filteredTodos : todos} />
+        )}
         <View style={{height: 100}} />
       </ScrollView>
       <Fab onPress={() => setOpenModal(true)} />
@@ -93,7 +101,7 @@ const styles = StyleSheet.create({
   },
   messageViewContainer: {
     width: windowWidth - 30,
-    marginBottom: 20,
+    marginBottom: 10,
     height: 110,
     flexDirection: 'row',
     backgroundColor: '#6887F6',

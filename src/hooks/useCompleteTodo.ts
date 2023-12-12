@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Todo} from '../models/todo.model';
@@ -9,13 +9,12 @@ import {uncompleteTodoService} from '../services/uncompleteTodo.service';
 
 export const useCompleteTodo = (todo: Todo) => {
   const dispatch = useDispatch();
-  const {status, date, title} = todo;
+  const {status, date, title, category} = todo;
   const {loading, callEndpoint} = useFetchAndLoad();
   const [checked, setChecked] = useState(status !== 'pending');
 
   const handleCheckTodo = (isChecked: boolean) => {
     if (isChecked) {
-      //Actualizar bd
       completeTodo();
     } else {
       uncompleteTodo();
@@ -45,7 +44,6 @@ export const useCompleteTodo = (todo: Todo) => {
     try {
       const {data} = await callEndpoint(completeTodoService(todo.id));
       dispatch(checkTodo(data.todo));
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -55,7 +53,6 @@ export const useCompleteTodo = (todo: Todo) => {
     try {
       const {data} = await callEndpoint(uncompleteTodoService(todo.id));
       dispatch(uncheckTodo(data.todo));
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -68,5 +65,6 @@ export const useCompleteTodo = (todo: Todo) => {
     handleCheckTodo,
     handleDeleteTodo,
     title,
+    category,
   };
 };

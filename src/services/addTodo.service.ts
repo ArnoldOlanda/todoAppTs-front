@@ -3,7 +3,6 @@ import {AddTodoResponse} from '../types';
 
 interface NewTodo {
   title: string;
-  description: string;
   date: Date | undefined;
   idUser: number;
   idCategory: number;

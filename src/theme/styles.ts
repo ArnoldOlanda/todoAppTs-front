@@ -18,7 +18,7 @@ export const globalStyles = StyleSheet.create({
   },
   textInput: {
     borderRadius: 20,
-    width: '90%',
+    width: '95%',
     height: 53,
     borderWidth: 1,
     borderColor: '#BCBEC0',

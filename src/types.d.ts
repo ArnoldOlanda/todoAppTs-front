@@ -24,20 +24,19 @@ export interface TodoResponse {
 interface Todo {
   id: number;
   title: string;
-  description: string;
   date: Date;
   status: string;
   createdAt: string;
   updatedAt: string;
+  category: Category;
 }
 
 export interface AddTodoResponse {
+  id: number;
   title: string;
-  description: string;
   date: Date;
   user: User;
   category: Category;
-  id: number;
   status: string;
   createdAt: string;
   updatedAt: string;

@@ -6,7 +6,7 @@ export const adaptedTodos = (todos: TodoResponse): Todo[] => {
     id: todo.id,
     title: todo.title,
     date: todo.date,
-    description: todo.description,
     status: todo.status,
+    category: todo.category,
   }));
 };

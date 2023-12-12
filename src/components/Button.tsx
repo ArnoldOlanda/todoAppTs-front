@@ -15,7 +15,7 @@ interface Props {
 export const Button = ({onPress, title, isLoading = false}: Props) => {
   return (
     <TouchableOpacity style={styles.getStartedBtn} onPress={() => onPress()}>
-      <Text style={{color: '#fff', fontSize: 20, fontWeight: 'bold'}}>
+      <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
         {isLoading ? <ActivityIndicator color="#fff" /> : title}
       </Text>
     </TouchableOpacity>

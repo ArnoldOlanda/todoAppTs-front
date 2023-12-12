@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ToastAndroid} from 'react-native';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,24 +14,22 @@ import {formatedTime} from '../utilities/formatedTime';
 
 interface InitialState {
   title: string;
-  description: string;
+  category: number;
   date: string;
   time: string;
 }
 
 const validations: Record<keyof InitialState, Validation> = {
   title: [(value: string) => value.length >= 1, 'El titulo es obligatorio'],
-  description: [
-    (value: string) => value.length >= 1,
-    'Este campo es obligatorio',
-  ],
+  category: [(value: number) => value > 0, 'Selecciona una categoria'],
   date: [(value: string) => value.length >= 1, 'Escoge una fecha valida'],
   time: [(value: string) => value.length >= 1, 'Escoge una hora valida'],
 };
+
 const initialState: InitialState = {
   title: '',
-  description: '',
   date: '',
+  category: 0,
   time: '',
 };
 
@@ -42,7 +40,7 @@ export const useModalAddTodo = ({closeModal}: {closeModal: Function}) => {
   const {user} = useSelector((state: RootState) => state.auth);
 
   const [formSubmited, setFormSubmited] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
 
   const {loading, callEndpoint} = useFetchAndLoad();
   const {
@@ -57,9 +55,9 @@ export const useModalAddTodo = ({closeModal}: {closeModal: Function}) => {
     DateTimePickerAndroid.open({
       value: date || new Date(),
       onChange: (event, currentDate) => {
-        setDate(currentDate);
+        setDate(currentDate!);
         if (currentMode === 'date') {
-          onInputTextChange('date', currentDate?.toLocaleDateString());
+          onInputTextChange('date', currentDate!.toLocaleDateString());
         } else {
           onInputTextChange('time', formatedTime(currentDate || new Date()));
         }
@@ -78,7 +76,7 @@ export const useModalAddTodo = ({closeModal}: {closeModal: Function}) => {
     if (!isFormValid) {
       return ToastAndroid.show(
         'Revise la informacion ingresada',
-        ToastAndroid.TOP,
+        ToastAndroid.LONG,
       );
     }
     addNewTodo();
@@ -88,11 +86,12 @@ export const useModalAddTodo = ({closeModal}: {closeModal: Function}) => {
   };
 
   const addNewTodo = async () => {
+    // console.log(formState);
     const todoData = {
       ...formState,
       date,
       idUser: user!.id,
-      idCategory: 1,
+      idCategory: formState.category,
     };
     try {
       const {data} = await callEndpoint(addTodo(todoData));

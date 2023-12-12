@@ -11,6 +11,8 @@ import {SettingsScreen} from '../screens/SettingsScreen';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../redux/slices/auth.slice';
 import {RootState} from '../redux/store';
+import {DoneTasksScreen} from '../screens/DoneTasksScreen';
+import {COLORS} from '../theme/colors';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +23,11 @@ export const HomeDrawer = () => {
         name="Home"
         options={{headerShown: false}}
         component={HomeScreen}
+      />
+      <Drawer.Screen
+        name="Done"
+        options={{headerShown: false}}
+        component={DoneTasksScreen}
       />
       <Drawer.Screen
         name="Settings"
@@ -38,7 +45,7 @@ const DrawerContent = ({navigation}: DrawerContentComponentProps) => {
     <DrawerContentScrollView style={styles.drawerContent}>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <Icon name="person" size={120} color="#000" />
+          <Icon name="person" size={100} color={COLORS.GRAY} />
           <Text style={{fontSize: 25}}>{user?.user}</Text>
           <Text>{user?.name}</Text>
         </View>
@@ -47,8 +54,17 @@ const DrawerContent = ({navigation}: DrawerContentComponentProps) => {
           rippleRadius={150}
           onPress={() => navigation.navigate('Home')}>
           <>
-            <Icon name="home" size={25} color="#000" />
-            <Text style={{color: '#000'}}>Home</Text>
+            <Icon name="home" size={25} color="#585858" />
+            <Text style={{color: '#363636'}}>Home</Text>
+          </>
+        </TouchableAndroid>
+        <TouchableAndroid
+          containerStyles={styles.menuItem}
+          rippleRadius={150}
+          onPress={() => navigation.navigate('Done')}>
+          <>
+            <Icon name="done-all" size={25} color={COLORS.GRAY} />
+            <Text style={{color: COLORS.GRAY}}>Done</Text>
           </>
         </TouchableAndroid>
         <TouchableAndroid
@@ -56,8 +72,8 @@ const DrawerContent = ({navigation}: DrawerContentComponentProps) => {
           rippleRadius={150}
           onPress={() => navigation.navigate('Settings')}>
           <>
-            <Icon name="settings" size={25} color="#000" />
-            <Text style={{color: '#000'}}>Settings</Text>
+            <Icon name="settings" size={25} color={COLORS.GRAY} />
+            <Text style={{color: COLORS.GRAY}}>Settings</Text>
           </>
         </TouchableAndroid>
         <TouchableAndroid
@@ -65,8 +81,8 @@ const DrawerContent = ({navigation}: DrawerContentComponentProps) => {
           rippleRadius={150}
           onPress={() => dispatch(logout())}>
           <>
-            <Icon name="logout" size={25} color="#000" />
-            <Text style={{color: '#000'}}>Logout</Text>
+            <Icon name="logout" size={25} color={COLORS.GRAY} />
+            <Text style={{color: COLORS.GRAY}}>Logout</Text>
           </>
         </TouchableAndroid>
       </View>

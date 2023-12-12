@@ -1,8 +1,12 @@
 export interface Todo {
   id: number;
   title: string;
-  description: string;
   date: Date;
   status: string;
-  // category: number;
+  category: {
+    id: number;
+    category: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }

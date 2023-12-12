@@ -5,8 +5,8 @@ export const adaptedTodo = (todo: AddTodoResponse): Todo => {
   return {
     id: todo.id,
     title: todo.title,
-    description: todo.description,
     date: todo.date,
     status: todo.status,
+    category: todo.category,
   };
 };

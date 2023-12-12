@@ -50,11 +50,11 @@ export const TextInput = ({
             : !error
             ? {
                 ...globalStyles.textInput,
-                height: 150,
+                height: 100,
               }
             : {
                 ...globalStyles.textInput,
-                height: 150,
+                height: 100,
                 borderColor: 'red',
               },
         ]}>
